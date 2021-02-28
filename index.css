@@ -1,0 +1,23 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: Segoe UI, sans-serif;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    background-color: #48d1cc;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+header h1 {
+    font-size: 25px;
+}

@@ -1,0 +1,66 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: Segoe UI, sans-serif;
+}
+div[hidden] {
+    display: none !important;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    background-color: #00ced1;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+header h1 {
+    font-size: 25px;
+}
+
+noscript {
+    color: #ff0000;
+    margin-bottom: 10px;
+}
+
+.icon, .icon:focus {
+    background-color: #00000000;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    vertical-align: middle;
+    outline: 0;
+}
+
+#input, #data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 5px;
+    background-color: #f0f0f0;
+}
+#input>*, #data>* {
+    margin: 5px 10px;
+}
+#input>section>* {
+    display:block;
+    width: 200px;
+}
+
+#output svg {
+    width: 400px;
+}
+@media only screen and (max-width: 800px) {
+    #output svg {
+        width: 100%;
+    }
+}

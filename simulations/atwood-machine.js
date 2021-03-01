@@ -39,7 +39,7 @@ const App = {
             let position = 0.5 * this.acceleration * this.time * this.time;
             if (position > 3) position = 3;
             if (position < -3) position = -3;
-            if (Math.abs(position) === 3) this.toggle();
+            if (Math.abs(position) === 3 && this.active) this.toggle();
             return [position, -position];
         },
     },

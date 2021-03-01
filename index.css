@@ -5,7 +5,7 @@
     font-family: Segoe UI, sans-serif;
 }
 
-#app {
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,4 +20,8 @@ header {
 }
 header h1 {
     font-size: 25px;
+}
+
+p {
+    margin-bottom: 5px;
 }

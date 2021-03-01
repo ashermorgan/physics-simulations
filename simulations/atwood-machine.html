@@ -29,6 +29,10 @@
                     <input type="range" min="1" max="10" step="0.1" v-model.number="mass2" @input="reset" :disabled="active" id="mass2Input">
                 </section>
                 <section>
+                    <label for="angleInput"><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
+                    <input type="range" min="0" max="90" step="1" v-model.number="angle" @input="reset" :disabled="active" id="angleInput">
+                </section>
+                <section>
                     <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
                     <input type="range" min="1" max="10" step="0.1" v-model.number="gravity" @input="reset" :disabled="active" id="gravityInput">
                 </section>
@@ -41,25 +45,25 @@
             </div>
 
             <div id="output" hidden>
-                <svg width="200px" viewBox="0 0 4 8">
+                <svg width="400px" viewBox="0 0 8.1 8">
                     <!-- Pulley -->
-                    <circle cx="2" cy="1.1" r="1" stroke-width="0.1" stroke="#808080" fill="#404040"></circle>
+                    <circle cx="1.5" cy="1.5" r="1" stroke-width="0.1" stroke="#808080" fill="#404040"></circle>
 
                     <!-- 1st weight -->
-                    <line x1="1" y1="1.1" x2="1" :y2="4.1 + positions[0]" stroke-width="0.1" stroke="#808080"></line>
-                    <circle cx="1" :cy="4.1 + positions[0]" :r="0.03*mass1+0.2" fill="#ff0000"></circle>
+                    <line x1="0.5" y1="1.5" x2="0.5" :y2="4.5 + displacement" stroke-width="0.1" stroke="#808080"></line>
+                    <circle cx="0.5" :cy="4.5 + displacement" :r="0.03*mass1+0.2" fill="#ff0000"></circle>
 
                     <!-- 2nd weight -->
-                    <line x1="3" y1="1.1" x2="3" :y2="4.1 + positions[1]" stroke-width="0.1" stroke="#808080"></line>
-                    <circle cx="3" :cy="4.1 + positions[1]" :r="0.03*mass2+0.2" fill="#0000ff"></circle>
+                    <line :x1="positionVector[0] + 1.5" :y1="positionVector[1] + 1.5" :x2="positionVector[2] + 1.5" :y2="positionVector[3] + 1.5" stroke-width="0.1" stroke="#808080"></line>
+                    <circle :cx="positionVector[2] + 1.5" :cy="positionVector[3] + 1.5" :r="0.03*mass2+0.2" fill="#0000ff"></circle>
                 </svg>
             </div>
 
             <div id="data" hidden>
                 <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
-                <label><b>Displacement:</b> {{ Math.abs(positions[0]).toFixed(2) }} m</label>
-                <label><b>Speed:</b> {{ Math.abs(velocity).toFixed(2) }} m/s</label>
-                <label><b>Acceleration:</b> {{ Math.abs(acceleration).toFixed(2) }} m/s<sup>2</sup></label>
+                <label><b>Displacement:</b> {{ Math.abs(displacement).toFixed(2) }} m</label>
+                <label><b>Velocity:</b> {{ velocity.toFixed(2) }} m/s</label>
+                <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
             </div>
         </div>
     </body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Horizontal Motion Simulation</title>
+        <meta name="Description" content="Horizontal motion physics simulation and calculator">
+        <meta name="viewport" content="width=device-width">
+        <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
+        <link rel="stylesheet" href="styles.css">
+        <script src="horizontal-motion.js"></script>
+    </head>
+    <body onload="createApp()">
+        <div id="app">
+            <header>
+                <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
+                <h1>Horizontal Motion Simulation</h1>
+            </header>
+
+            <noscript>
+                <p>This simulation requires JavaScript</p>
+            </noscript>
+
+            <div id="input" hidden>
+                <section>
+                    <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
+                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass" @input="reset" :disabled="active" id="massInput">
+                </section>
+                <section>
+                    <label for="initialVelocityInput"><b>Initial Velocity:</b> {{ initialVelocity.toFixed(1) }} m/s</label>
+                    <input type="range" min="-10" max="10" step="0.1" v-model.number="initialVelocity" @input="reset" :disabled="active" id="initialVelocityInput">
+                </section>
+                <section>
+                    <label for="forceInput"><b>Applied Force:</b> {{ force.toFixed(1) }} N</label>
+                    <input type="range" min="-10" max="10" step="0.1" v-model.number="force" @input="reset" :disabled="active" id="forceInput">
+                </section>
+                <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
+                    <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                </button>
+                <button @click="reset" class="icon" title="Reset">
+                    <img alt="" src="../images/reset.svg">
+                </button>
+            </div>
+
+            <div id="output" hidden>
+                <svg width="800px" viewBox="0 0 10 2">
+                    <!-- Ruler marks -->
+                    <line v-for="(_,n) in 101" :x1="references[1] + n*0.1" y1="1.7" :x2="references[1] + n*0.1" y2="1.9" stroke-width="0.01" stroke="#000000"></line>
+                    <line v-for="(_,n) in 11"  :x1="references[0] + n"     y1="1.6" :x2="references[0] + n"     y2="2.0" stroke-width="0.02" stroke="#000000"></line>
+
+                    <!-- Force vector -->
+                    <line x1="5" :y1="1.2 - 0.05*mass+0.1" :x2="5+0.3*force" :y2="1.2 - 0.05*mass+0.1" stroke-width="0.1" stroke="#808080"></line>
+                    <path v-show="force&gt;0" :d="`M${5+0.3*force} ${1.3 - 0.05*mass+0.1} L${5.1+0.3*force} ${1.2 - 0.05*mass+0.1} L${5+0.3*force} ${1.1 - 0.05*mass+0.1} Z`" stroke="#808080" stroke-width="0.025" fill="#808080"/>
+                    <path v-show="force&lt;0" :d="`M${5+0.3*force} ${1.3 - 0.05*mass+0.1} L${4.9+0.3*force} ${1.2 - 0.05*mass+0.1} L${5+0.3*force} ${1.1 - 0.05*mass+0.1} Z`" stroke="#808080" stroke-width="0.025" fill="#808080"/>
+
+                    <!-- Object -->
+                    <circle cx="5" :cy="1.2 - 0.05*mass+0.1" :r="0.05*mass+0.1" fill="#ff0000"></circle>
+                </svg>
+            </div>
+
+            <div id="data" hidden>
+                <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
+                <label><b>Position:</b> {{ position.toFixed(2) }} m</label>
+                <label><b>Velocity:</b> {{ velocity.toFixed(2) }} m/s</label>
+                <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
+            </div>
+        </div>
+    </body>
+</html>

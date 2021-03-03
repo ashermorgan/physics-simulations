@@ -68,3 +68,9 @@ noscript {
         width: 100%;
     }
 }
+@media only screen and (max-width: 350px) {
+    header a.icon {
+        position: static;
+        float: left;
+    }
+}

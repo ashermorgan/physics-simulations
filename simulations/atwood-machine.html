@@ -39,16 +39,21 @@
                     <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
                     <input type="range" min="1" max="10" step="0.1" v-model.number="gravity" @input="reset" :disabled="active" id="gravityInput">
                 </section>
-                <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
-                    <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
-                </button>
-                <button @click="reset" class="icon" title="Reset">
-                    <img alt="" src="../images/reset.svg">
-                </button>
             </div>
 
             <div id="output" hidden>
-                <svg width="400px" viewBox="0 0 8.1 8">
+                <div id="controls">
+                    <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')" :disabled="Math.abs(displacement) === 3">
+                        <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                    </button>
+                    <button @click="update" class="icon" title="Step Forward" :disabled="Math.abs(displacement) === 3">
+                        <img alt="" src="../images/step-forward.svg">
+                    </button>
+                    <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
+                        <img alt="" src="../images/reset.svg">
+                    </button>
+                </div>
+                <svg width="400px" viewBox="-0.1 -0.1 8.3 8.1">
                     <!-- Pulley -->
                     <circle cx="1.5" cy="1.5" r="1" stroke-width="0.1" stroke="#808080" fill="#404040"></circle>
 

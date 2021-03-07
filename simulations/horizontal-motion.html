@@ -25,15 +25,15 @@
             <div id="input" hidden>
                 <section>
                     <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass" @input="reset" :disabled="active" id="massInput">
+                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass" @input="reset" @dblclick="mass=5" :disabled="active" id="massInput">
                 </section>
                 <section>
                     <label for="initialVelocityInput"><b>Initial Velocity:</b> {{ initialVelocity.toFixed(1) }} m/s</label>
-                    <input type="range" min="-10" max="10" step="0.1" v-model.number="initialVelocity" @input="reset" :disabled="active" id="initialVelocityInput">
+                    <input type="range" min="-10" max="10" step="0.1" v-model.number="initialVelocity" @input="reset" @dblclick="initialVelocity=1" :disabled="active" id="initialVelocityInput">
                 </section>
                 <section>
                     <label for="forceInput"><b>Applied Force:</b> {{ force.toFixed(1) }} N</label>
-                    <input type="range" min="-10" max="10" step="0.1" v-model.number="force" @input="reset" :disabled="active" id="forceInput">
+                    <input type="range" min="-10" max="10" step="0.1" v-model.number="force" @input="reset" @dblclick="force=0" :disabled="active" id="forceInput">
                 </section>
             </div>
 

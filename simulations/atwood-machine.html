@@ -25,19 +25,19 @@
             <div id="input" hidden>
                 <section>
                     <label for="mass1Input"><b>Mass 1:</b> {{ mass1.toFixed(1) }} Kg</label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass1" @input="reset" :disabled="active" id="mass1Input">
+                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass1" @input="reset" @dblclick="mass1=1" :disabled="active" id="mass1Input">
                 </section>
                 <section>
                     <label for="mass2Input"><b>Mass 2:</b> {{ mass2.toFixed(1) }} Kg</label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass2" @input="reset" :disabled="active" id="mass2Input">
+                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass2" @input="reset" @dblclick="mass2=10" :disabled="active" id="mass2Input">
                 </section>
                 <section>
                     <label for="angleInput"><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
-                    <input type="range" min="0" max="90" step="1" v-model.number="angle" @input="reset" :disabled="active" id="angleInput">
+                    <input type="range" min="0" max="90" step="1" v-model.number="angle" @input="reset" @dblclick="angle=90" :disabled="active" id="angleInput">
                 </section>
                 <section>
                     <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="gravity" @input="reset" :disabled="active" id="gravityInput">
+                    <input type="range" min="1" max="10" step="0.1" v-model.number="gravity" @input="reset" @dblclick="gravity=9.8" :disabled="active" id="gravityInput">
                 </section>
             </div>
 

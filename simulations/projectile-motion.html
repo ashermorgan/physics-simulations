@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Projectile Motion Simulation</title>
+        <meta name="Description" content="Projectile motion physics simulation and calculator">
+        <meta name="viewport" content="width=device-width">
+        <link rel="icon" type="image/png" href="../images/favicon-32.png">
+        <link rel="apple-touch-icon" href="../images/favicon-180.png">
+        <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
+        <link rel="stylesheet" href="styles.css">
+        <script src="projectile-motion.js"></script>
+    </head>
+    <body onload="createApp()">
+        <div id="app">
+            <header>
+                <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
+                <h1>Projectile Motion</h1>
+            </header>
+
+            <noscript>
+                <p>This simulation requires JavaScript</p>
+            </noscript>
+
+            <div id="input" hidden>
+                <section>
+                    <label for="heightInput"><b>Height:</b> {{ height.toFixed(1) }} m</label>
+                    <input type="range" min="0" max="10" step="0.1" v-model.number="height" @input="reset" :disabled="active" @dblclick="height=1" id="heightInput">
+                </section>
+                <section>
+                    <label for="initialVelocityInput"><b>Velocity:</b> {{ initialVelocity.toFixed(1) }} m/s</label>
+                    <input type="range" min="0" max="10" step="0.1" v-model.number="initialVelocity" @input="reset" :disabled="active" @dblclick="initialVelocity=5" id="initialVelocityInput">
+                </section>
+                <section>
+                    <label for="angleInput"><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
+                    <input type="range" min="-90" max="90" step="1" v-model.number="angle" @input="reset" :disabled="active" @dblclick="angle=0" id="angleInput">
+                </section>
+                <section>
+                    <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
+                    <input type="range" min="0" max="10" step="0.1" v-model.number="gravity" @input="reset" :disabled="active" @dblclick="gravity=9.8" id="gravityInput">
+                </section>
+            </div>
+
+            <div id="output" hidden>
+                <div id="controls">
+                    <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')" :disabled="time !== 0 && position.y &lt;= 0">
+                        <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                    </button>
+                    <button @click="update" class="icon" title="Step Forward" :disabled="(time !== 0 && position.y &lt;= 0) || active">
+                        <img alt="" src="../images/step-forward.svg">
+                    </button>
+                    <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
+                        <img alt="" src="../images/reset.svg">
+                    </button>
+                </div>
+                <svg width="400px" viewBox="-0.1 -0.1 10.1 10.2">
+                    <!-- Ground -->
+                    <line x1="-0.1" y1="10.1" x2="10" y2="10.1" stroke-width="0.1" stroke="#404040"></line>
+
+                    <!-- Path -->
+                    <circle v-for="position in positions" :cx="position.x" :cy="10 - position.y" r="0.05" fill="#808080"></circle>
+
+                    <!-- Projectile -->
+                    <circle :cx="position.x" :cy="10 - position.y" r="0.1" fill="#ff0000"></circle>
+                </svg>
+            </div>
+
+            <div id="data" hidden>
+                <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
+                <label><b>Position:</b> {{ position.x.toFixed(2) }} m, {{ position.y > 0 ? position.y.toFixed(2) : 0.0.toFixed(2) }} m</label>
+                <label><b>Velocity:</b> {{ velocity.total.toFixed(2) }} m/s at {{ velocity.angle.toFixed(1) }}<sup>o</sup></label>
+            </div>
+        </div>
+    </body>
+</html>

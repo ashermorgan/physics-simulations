@@ -72,9 +72,15 @@ noscript {
     width: min-content;
     border: 1px solid #000000;
 }
-#output>#controls {
+#output>#simControls {
     position: absolute;
     right: 0px;
+    padding: 5px;
+    padding-bottom: 0px;
+}
+#output>#zoomControls {
+    position: absolute;
+    left: 0px;
     padding: 5px;
     padding-bottom: 0px;
 }
@@ -85,7 +91,7 @@ noscript {
     #output>svg {
         width: 100%;
     }
-    #controls .icon {
+    #output .icon {
         padding: 10px;
     }
 }

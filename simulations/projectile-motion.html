@@ -8,6 +8,8 @@
         <link rel="icon" type="image/png" href="../images/favicon-32.png">
         <link rel="apple-touch-icon" href="../images/favicon-180.png">
         <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+        <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
         <link rel="stylesheet" href="styles.css">
         <script src="projectile-motion.js"></script>
     </head>
@@ -42,7 +44,7 @@
             </div>
 
             <div id="output" hidden>
-                <div id="controls">
+                <div id="simControls">
                     <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')" :disabled="time !== 0 && position.y &lt;= 0">
                         <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
                     </button>
@@ -53,15 +55,26 @@
                         <img alt="" src="../images/reset.svg">
                     </button>
                 </div>
-                <svg width="400px" viewBox="-0.1 -0.1 10.1 10.2">
+                <div id="zoomControls">
+                    <button @click="svg.zoomOut()" class="icon" title="Zoom Out">
+                        <img alt="" src="../images/zoom-out.svg">
+                    </button>
+                    <button @click="svg.resetZoom();svg.resetPan()" class="icon" title="Reset Zoom">
+                        <img alt="" src="../images/home.svg">
+                    </button>
+                    <button @click="svg.zoomIn()" class="icon" title="Zoom In">
+                        <img alt="" src="../images/zoom-in.svg">
+                    </button>
+                </div>
+                <svg width="400px" height="400px" viewBox="-1 -1 101 102">
                     <!-- Ground -->
-                    <line x1="-0.1" y1="10.1" x2="10" y2="10.1" stroke-width="0.1" stroke="#404040"></line>
+                    <line x1="-10000" y1="101" x2="10000" y2="101" stroke-width="1" stroke="#404040"></line>
 
                     <!-- Path -->
-                    <circle v-for="position in positions" :cx="position.x" :cy="10 - position.y" r="0.05" fill="#808080"></circle>
+                    <circle v-for="position in positions" :cx="10*position.x" :cy="100 - 10*position.y" r="0.5" fill="#808080"></circle>
 
                     <!-- Projectile -->
-                    <circle :cx="position.x" :cy="10 - position.y" r="0.1" fill="#ff0000"></circle>
+                    <circle :cx="10*position.x" :cy="100 - 10*position.y" r="1" fill="#ff0000"></circle>
                 </svg>
             </div>
 

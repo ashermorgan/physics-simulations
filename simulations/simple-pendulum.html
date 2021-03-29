@@ -2,20 +2,20 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Spring-Mass System Simulation</title>
-        <meta name="Description" content="Spring-Mass system physics simulation and calculator">
+        <title>Simple Pendulum Simulation</title>
+        <meta name="Description" content="Simple pendulum physics simulation and calculator">
         <meta name="viewport" content="width=device-width">
         <link rel="icon" type="image/png" href="../images/favicon-32.png">
         <link rel="apple-touch-icon" href="../images/favicon-180.png">
         <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
         <link rel="stylesheet" href="styles.css">
-        <script src="spring-mass-system.js"></script>
+        <script src="simple-pendulum.js"></script>
     </head>
     <body onload="createApp()">
         <div id="app">
             <header>
                 <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
-                <h1>Spring-Mass System</h1>
+                <h1>Simple Pendulum</h1>
             </header>
 
             <noscript>
@@ -24,16 +24,16 @@
 
             <div id="input" hidden>
                 <section>
-                    <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
-                    <input type="range" min="0.1" max="10" step="0.1" v-model.number="mass" @input="reset" @dblclick="mass=5" :disabled="active" id="massInput">
+                    <label for="radiusInput"><b>Radius:</b> {{ radius.toFixed(1) }} m</label>
+                    <input type="range" min="1" max="10" step="0.1" v-model.number="radius" @input="reset" @dblclick="radius=5" :disabled="active" id="radiusInput">
                 </section>
                 <section>
-                    <label for="initialPositionInput"><b>Initial Position:</b> {{ initialPosition.toFixed(1) }} m</label>
-                    <input type="range" min="-10" max="10" step="0.1" v-model.number="initialPosition" @input="reset" @dblclick="initialPosition=0" :disabled="active" id="initialPositionInput">
+                    <label for="angleInput"><b>Initial Angle:</b> {{ initialAngle.toFixed(0) }}<sup>o</sup></label>
+                    <input type="range" min="-45" max="45" step="1" v-model.number="initialAngle" @input="reset" @dblclick="initialAngle=0" :disabled="active" id="angleInput">
                 </section>
                 <section>
-                    <label for="stiffnessInput"><b>Stiffness (k):</b> {{ stiffness.toFixed(0) }} N/m</label>
-                    <input type="range" min="1" max="100" step="1" v-model.number="stiffness" @input="reset" @dblclick="stiffness=5" :disabled="active" id="stiffnessInput">
+                    <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
+                    <input type="range" min="0.1" max="10" step="0.1" v-model.number="gravity" @input="reset" @dblclick="gravity=9.8" :disabled="active" id="gravityInput">
                 </section>
             </div>
 
@@ -49,26 +49,23 @@
                         <img alt="" src="../images/reset.svg">
                     </button>
                 </div>
-                <svg width="800px" viewBox="-11 0 22 4">
-                    <!-- Point of equilibrium -->
-                    <line x1="0" y1="0" :x2="0" y2="4" stroke="#808080" stroke-width="0.05" stroke-dasharray="0.1,0.1"></line>
+                <svg width="400px" viewBox="-8 -3 16 16">
+                    <!-- String -->
+                    <circle cx="0" c1="0" r="0.1" fill="#808080"></circle>
+                    <line x1="0" y1="0" :x2="position.x" :y2="-position.y" stroke="#808080" stroke-width="0.2"></line>
 
-                    <!-- Spring -->
-                    <line x1="-11" y1="2" :x2="position" y2="2" stroke="#404040" stroke-width="0.1"></line>
-                    <rect x="-11" y="1" width="0.25" height="2" fill="#000000"></rect>
+                    <!-- Box -->
+                    <rect x="-2" y="-0.5" width="4" height="0.5" fill="#000000"></rect>
 
                     <!-- Mass -->
-                    <circle :cx="position" cy="2" :r="0.05*mass+0.1" fill="#ff0000"></circle>
+                    <circle :cx="position.x" :cy="-position.y" r="0.5" fill="#ff0000"></circle>
                 </svg>
             </div>
 
             <div id="data" hidden>
                 <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
                 <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
-                <label><b>Amplitude:</b> {{ Math.abs(initialPosition) }} m</label>
-                <label><b>Position:</b> {{ position.toFixed(2) }} m</label>
-                <label><b>Velocity:</b> {{ velocity.toFixed(2) }} m/s</label>
-                <label><b>Force:</b> {{ force.toFixed(2) }} N</label>
+                <label><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
                 <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
             </div>
         </div>

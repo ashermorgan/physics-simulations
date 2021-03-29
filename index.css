@@ -1,27 +1,44 @@
+/* default styles */
 * {
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
     font-family: Segoe UI, sans-serif;
+    transition-duration: 0.25s;
+    text-align: center;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+/* page header */
 header {
     background-color: #48d1cc;
     width: 100%;
-    text-align: center;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 header h1 {
     font-size: 25px;
 }
 
-p {
-    margin-bottom: 5px;
+/* simulation links */
+#simulationLinks {
+    padding: 15px;
+    padding-top: 0px;
+}
+#simulationLinks a {
+    display: inline-block;
+    margin: 15px;
+    line-height: 50px;
+    width: 200px;
+    background-color: #E0E0E0;
+    color: #000000;
+    text-decoration: none;
+}
+#simulationLinks a:hover, #simulationLinks a:focus {
+    box-shadow: 0 0 15px #808080;
+    transform: scale(1.1);
+}
+@media only screen and (max-width: 500px) {
+    #simulationLinks a {
+        width: calc(100% - 30px);
+    }
 }

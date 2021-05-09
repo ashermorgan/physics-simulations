@@ -73,6 +73,10 @@
                     <!-- Path -->
                     <circle v-for="position in positions" :cx="10*position.x" :cy="100 - 10*position.y" r="0.5" fill="#808080"></circle>
 
+                    <!-- Launch vector -->
+                    <line :x1="10*position.x" :y1="100 - 10*position.y" :x2="10*launchArrow[1].x" :y2="100 - 10*launchArrow[1].y"  stroke-width="1" stroke="#808080"></line>
+                    <path :d="`M${10*launchArrow[0].x} ${100 - 10*launchArrow[0].y} L${10*launchArrow[1].x} ${100 - 10*launchArrow[1].y} L${10*launchArrow[2].x} ${100 - 10*launchArrow[2].y} Z`" stroke="#808080" stroke-width="1" fill="#808080"/>
+
                     <!-- Projectile -->
                     <circle :cx="10*position.x" :cy="100 - 10*position.y" r="1" fill="#ff0000"></circle>
                 </svg>

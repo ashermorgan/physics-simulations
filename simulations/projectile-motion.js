@@ -27,7 +27,7 @@ const App = {
         },
 
         /**
-         * The current velocity of the projectile.
+         * The current velocity of the projectile
          */
         velocity: function() {
             let x = this.getAdj(this.angle, this.initialVelocity);
@@ -36,6 +36,32 @@ const App = {
             let angle = total != 0 ? this.getAng(y, x) : 0;
             return {x, y, total, angle};
         },
+
+        /**
+         * The coordinates of the launch vector arrow
+         */
+        launchArrow: function() {
+            if (this.time !== 0 || this.initialVelocity === 0) {
+                return [
+                    this.position,
+                    this.position,
+                    this.position
+                ];
+            }
+            else {
+                let x = this.position.x + this.getAdj(this.angle, this.initialVelocity / 4 + 0.4);
+                let y = this.position.y + this.getOpp(this.angle, this.initialVelocity / 4 + 0.4);
+                let arrow1x = x - this.getAdj(this.angle + 20, 0.25);
+                let arrow1y = y - this.getOpp(this.angle + 20, 0.25);
+                let arrow2x = x - this.getAdj(this.angle - 20, 0.25);
+                let arrow2y = y - this.getOpp(this.angle - 20, 0.25);
+                return [
+                    { x: arrow1x, y: arrow1y },  // Arrow side #1
+                    { x: x,       y: y       },  // Center point
+                    { x: arrow2x, y: arrow2y },  // Arrow side #2
+                ];
+            }
+        }
     },
     methods: {
         /**

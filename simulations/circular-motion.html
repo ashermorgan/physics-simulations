@@ -15,6 +15,8 @@
         <div id="app">
             <header>
                 <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
+                <button v-show="!infoVisible" title="About" class="icon" @click="infoVisible=true"><img alt="" src="../images/info.svg"></button>
+                <button v-show="infoVisible" title="Close" class="icon" @click="infoVisible=false"><img alt="" src="../images/x.svg"></button>
                 <h1>Circular Motion</h1>
             </header>
 
@@ -22,55 +24,83 @@
                 <p>This simulation requires JavaScript</p>
             </noscript>
 
-            <div id="input" hidden>
-                <section>
-                    <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="mass" @input="reset" @dblclick="mass=5" :disabled="active" id="massInput">
-                </section>
-                <section>
-                    <label for="forceInput"><b>Centripetal Force:</b> {{ force.toFixed(1) }} N</label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="force" @input="reset" @dblclick="force=5" :disabled="active" id="forceInput">
-                </section>
-                <section>
-                    <label for="radiusInput"><b>Radius:</b> {{ radius.toFixed(2) }} m</label>
-                    <input type="range" min="0.1" max="1" step="0.01" v-model.number="radius" @input="reset" @dblclick="radius=1" :disabled="active" id="radiusInput">
-                </section>
-            </div>
-
-            <div id="output" hidden>
-                <div id="simControls">
-                    <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
-                        <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
-                    </button>
-                    <button @click="update" class="icon" title="Step Forward" :disabled="active">
-                        <img alt="" src="../images/step-forward.svg">
-                    </button>
-                    <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
-                        <img alt="" src="../images/reset.svg">
-                    </button>
+            <div id="simulation" v-show="!infoVisible">
+                <div id="input" hidden>
+                    <section>
+                        <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
+                        <input type="range" min="1" max="10" step="0.1" v-model.number="mass" @input="reset" @dblclick="mass=5" :disabled="active" id="massInput">
+                    </section>
+                    <section>
+                        <label for="forceInput"><b>Centripetal Force:</b> {{ force.toFixed(1) }} N</label>
+                        <input type="range" min="1" max="10" step="0.1" v-model.number="force" @input="reset" @dblclick="force=5" :disabled="active" id="forceInput">
+                    </section>
+                    <section>
+                        <label for="radiusInput"><b>Radius:</b> {{ radius.toFixed(2) }} m</label>
+                        <input type="range" min="0.1" max="1" step="0.01" v-model.number="radius" @input="reset" @dblclick="radius=1" :disabled="active" id="radiusInput">
+                    </section>
                 </div>
-                <svg width="400px" viewBox="-1.5 -1.5 3 3">
-                    <!-- Circle outline -->
-                    <circle cx="0" cy="0" :r="radius" stroke="#808080" stroke-width="0.01" fill="none" stroke-dasharray="0.05,0.05"/>
-                    <circle cx="0" cy="0" r="0.025" fill="#000000"></circle>
 
-                    <!-- Velocity vector-->
-                    <line :x1="position[0]" :y1="position[1]" :x2="velocityVector[0]" :y2="velocityVector[1]" stroke="black" stroke-width="0.025"/>
-                    <path :d="`M${velocityVector[2]} ${velocityVector[3]} L${velocityVector[0]} ${velocityVector[1]} L${velocityVector[4]} ${velocityVector[5]} Z`" stroke="#000000" stroke-width="0.025" fill="#000000"/>
+                <div id="output" hidden>
+                    <div id="simControls">
+                        <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
+                            <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                        </button>
+                        <button @click="update" class="icon" title="Step Forward" :disabled="active">
+                            <img alt="" src="../images/step-forward.svg">
+                        </button>
+                        <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
+                            <img alt="" src="../images/reset.svg">
+                        </button>
+                    </div>
+                    <svg width="400px" viewBox="-1.5 -1.5 3 3">
+                        <!-- Circle outline -->
+                        <circle cx="0" cy="0" :r="radius" stroke="#808080" stroke-width="0.01" fill="none" stroke-dasharray="0.05,0.05"/>
+                        <circle cx="0" cy="0" r="0.025" fill="#000000"></circle>
 
-                    <!-- Centripetal force vector-->
-                    <line :x1="position[0]" :y1="position[1]" :x2="forceVector[0]" :y2="forceVector[1]" stroke="gray" stroke-width="0.025"/>
-                    <path :d="`M${forceVector[2]} ${forceVector[3]} L${forceVector[0]} ${forceVector[1]} L${forceVector[4]} ${forceVector[5]} Z`" stroke="#808080" stroke-width="0.025" fill="#808080"/>
+                        <!-- Velocity vector-->
+                        <line :x1="position[0]" :y1="position[1]" :x2="velocityVector[0]" :y2="velocityVector[1]" stroke="black" stroke-width="0.025"/>
+                        <path :d="`M${velocityVector[2]} ${velocityVector[3]} L${velocityVector[0]} ${velocityVector[1]} L${velocityVector[4]} ${velocityVector[5]} Z`" stroke="#000000" stroke-width="0.025" fill="#000000"/>
 
-                    <!-- Object -->
-                    <circle :cx="position[0]" :cy="position[1]" :r="(0.005*mass)+0.025" fill="#ff0000"/>
-                </svg>
+                        <!-- Centripetal force vector-->
+                        <line :x1="position[0]" :y1="position[1]" :x2="forceVector[0]" :y2="forceVector[1]" stroke="gray" stroke-width="0.025"/>
+                        <path :d="`M${forceVector[2]} ${forceVector[3]} L${forceVector[0]} ${forceVector[1]} L${forceVector[4]} ${forceVector[5]} Z`" stroke="#808080" stroke-width="0.025" fill="#808080"/>
+
+                        <!-- Object -->
+                        <circle :cx="position[0]" :cy="position[1]" :r="(0.005*mass)+0.025" fill="#ff0000"/>
+                    </svg>
+                </div>
+
+                <div id="data" hidden>
+                    <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
+                    <label><b>Speed:</b> {{ speed.toFixed(2) }} m/s</label>
+                    <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
+                </div>
             </div>
 
-            <div id="data" hidden>
-                <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
-                <label><b>Speed:</b> {{ speed.toFixed(2) }} m/s</label>
-                <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
+            <div id="info" v-show="infoVisible" hidden>
+                <h2>Simulation Information</h2>
+                <p>This simulation consists of an object that is spun in a circle by a centripetal force.</p>
+
+                <p>You can control the simulation using these variables:</p>
+                <ul>
+                    <li><b>Mass:</b> The mass of the object</li>
+                    <li><b>Centripetal Force:</b> The magnitude of the centripetal force</li>
+                    <li><b>Radius:</b> The radius of the circle</li>
+                </ul>
+
+                <p>The simulation also contains these output measurements:</p>
+                <ul>
+                    <li><b>Time:</b> The time that has passed</li>
+                    <li><b>Speed:</b> The current speed of the object</li>
+                    <li><b>Period:</b> The period of the object</li>
+                </ul>
+
+                <p>Controls:</p>
+                <ul>
+                    <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
+                    <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
+                    <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
             </div>
         </div>
     </body>

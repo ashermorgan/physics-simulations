@@ -9,6 +9,7 @@ const App = {
             active: false,      // Whether the simulation is active
             refreshRate: 0.01,  // The simulation refresh rate (s)
             intervalId: null,   // The value returned by setInterval
+            infoVisible: false,
         }
     },
     computed: {
@@ -59,6 +60,17 @@ const App = {
     },
     methods: {
         /**
+         * Handle a keyup event (implements keyboard shortcuts)
+         * @param {object} e - The event args
+         */
+        keyup: function(e) {
+            if (e.key === "Escape") {
+                if (this.infoVisible) this.infoVisible = false;
+                else window.location.href = "../";
+            }
+        },
+
+        /**
          * Toggle whether the simulation is active
          */
         toggle: function() {
@@ -101,6 +113,14 @@ const App = {
             return Math.cos(angle / 360 * 2 * Math.PI) * distance;
         },
     },
+    created: function() {
+        // Add keyup handler
+        window.addEventListener("keyup", this.keyup);
+    },
+    destroyed: function() {
+        // Remove keyup handler
+        window.removeEventListener("keyup", this.keyup);
+    },
 }
 
 
@@ -114,4 +134,5 @@ function createApp() {
     document.getElementById("input").hidden = false;
     document.getElementById("output").hidden = false;
     document.getElementById("data").hidden = false;
+    document.getElementById("info").hidden = false;
 }

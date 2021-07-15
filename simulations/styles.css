@@ -9,9 +9,6 @@ div[hidden] {
 }
 
 #app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     touch-action: manipulation;
 }
 
@@ -28,6 +25,10 @@ header h1 {
 header a {
     position: absolute;
     left: 5px;
+}
+header button {
+    position: absolute;
+    right: 5px;
 }
 
 noscript {
@@ -46,6 +47,12 @@ noscript {
 .icon:disabled {
     filter: invert(50%);
     cursor: default;
+}
+
+#simulation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #input, #data {
@@ -100,4 +107,31 @@ noscript {
         position: static;
         float: left;
     }
+    header button.icon {
+        position: static;
+        float: right;
+    }
+}
+
+#info {
+    max-width: 750px;
+    margin: auto;
+    padding: 15px;
+    padding-top: 0px;
+}
+#info h2 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+#info>* {
+    margin-bottom: 15px;
+}
+#info p + ul {
+    margin-top: -15px;
+}
+#info li {
+    margin-left: 30px;
+}
+#info img {
+    vertical-align: middle;
 }

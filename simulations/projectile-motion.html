@@ -17,6 +17,8 @@
         <div id="app">
             <header>
                 <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
+                <button v-show="!infoVisible" title="About" class="icon" @click="infoVisible=true"><img alt="" src="../images/info.svg"></button>
+                <button v-show="infoVisible" title="Close" class="icon" @click="infoVisible=false"><img alt="" src="../images/x.svg"></button>
                 <h1>Projectile Motion</h1>
             </header>
 
@@ -24,68 +26,100 @@
                 <p>This simulation requires JavaScript</p>
             </noscript>
 
-            <div id="input" hidden>
-                <section>
-                    <label for="heightInput"><b>Height:</b> {{ height.toFixed(1) }} m</label>
-                    <input type="range" min="0" max="10" step="0.1" v-model.number="height" @input="reset" :disabled="active" @dblclick="height=1" id="heightInput">
-                </section>
-                <section>
-                    <label for="initialVelocityInput"><b>Velocity:</b> {{ initialVelocity.toFixed(1) }} m/s</label>
-                    <input type="range" min="0" max="10" step="0.1" v-model.number="initialVelocity" @input="reset" :disabled="active" @dblclick="initialVelocity=5" id="initialVelocityInput">
-                </section>
-                <section>
-                    <label for="angleInput"><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
-                    <input type="range" min="-90" max="90" step="1" v-model.number="angle" @input="reset" :disabled="active" @dblclick="angle=0" id="angleInput">
-                </section>
-                <section>
-                    <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
-                    <input type="range" min="0" max="10" step="0.1" v-model.number="gravity" @input="reset" :disabled="active" @dblclick="gravity=9.8" id="gravityInput">
-                </section>
+            <div id="simulation" v-show="!infoVisible">
+                <div id="input" hidden>
+                    <section>
+                        <label for="heightInput"><b>Height:</b> {{ height.toFixed(1) }} m</label>
+                        <input type="range" min="0" max="10" step="0.1" v-model.number="height" @input="reset" :disabled="active" @dblclick="height=1" id="heightInput">
+                    </section>
+                    <section>
+                        <label for="initialVelocityInput"><b>Velocity:</b> {{ initialVelocity.toFixed(1) }} m/s</label>
+                        <input type="range" min="0" max="10" step="0.1" v-model.number="initialVelocity" @input="reset" :disabled="active" @dblclick="initialVelocity=5" id="initialVelocityInput">
+                    </section>
+                    <section>
+                        <label for="angleInput"><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
+                        <input type="range" min="-90" max="90" step="1" v-model.number="angle" @input="reset" :disabled="active" @dblclick="angle=0" id="angleInput">
+                    </section>
+                    <section>
+                        <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
+                        <input type="range" min="0" max="10" step="0.1" v-model.number="gravity" @input="reset" :disabled="active" @dblclick="gravity=9.8" id="gravityInput">
+                    </section>
+                </div>
+
+                <div id="output" hidden>
+                    <div id="simControls">
+                        <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')" :disabled="time !== 0 && position.y &lt;= 0">
+                            <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                        </button>
+                        <button @click="update" class="icon" title="Step Forward" :disabled="(time !== 0 && position.y &lt;= 0) || active">
+                            <img alt="" src="../images/step-forward.svg">
+                        </button>
+                        <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
+                            <img alt="" src="../images/reset.svg">
+                        </button>
+                    </div>
+                    <div id="zoomControls">
+                        <button @click="svg.zoomOut()" class="icon" title="Zoom Out">
+                            <img alt="" src="../images/zoom-out.svg">
+                        </button>
+                        <button @click="svg.resetZoom();svg.resetPan()" class="icon" title="Reset Zoom">
+                            <img alt="" src="../images/home.svg">
+                        </button>
+                        <button @click="svg.zoomIn()" class="icon" title="Zoom In">
+                            <img alt="" src="../images/zoom-in.svg">
+                        </button>
+                    </div>
+                    <svg width="400px" height="400px" viewBox="-1 -1 101 102">
+                        <!-- Ground -->
+                        <line x1="-10000" y1="101" x2="10000" y2="101" stroke-width="1" stroke="#404040"></line>
+
+                        <!-- Path -->
+                        <circle v-for="position in positions" :cx="10*position.x" :cy="100 - 10*position.y" r="0.5" fill="#808080"></circle>
+
+                        <!-- Launch vector -->
+                        <line :x1="10*position.x" :y1="100 - 10*position.y" :x2="10*launchArrow[1].x" :y2="100 - 10*launchArrow[1].y"  stroke-width="1" stroke="#808080"></line>
+                        <path :d="`M${10*launchArrow[0].x} ${100 - 10*launchArrow[0].y} L${10*launchArrow[1].x} ${100 - 10*launchArrow[1].y} L${10*launchArrow[2].x} ${100 - 10*launchArrow[2].y} Z`" stroke="#808080" stroke-width="1" fill="#808080"/>
+
+                        <!-- Projectile -->
+                        <circle :cx="10*position.x" :cy="100 - 10*position.y" r="1" fill="#ff0000"></circle>
+                    </svg>
+                </div>
+
+                <div id="data" hidden>
+                    <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
+                    <label><b>Position:</b> {{ position.x.toFixed(2) }} m, {{ position.y > 0 ? position.y.toFixed(2) : 0.0.toFixed(2) }} m</label>
+                    <label><b>Velocity:</b> {{ velocity.total.toFixed(2) }} m/s at {{ velocity.angle.toFixed(1) }}<sup>o</sup></label>
+                </div>
             </div>
 
-            <div id="output" hidden>
-                <div id="simControls">
-                    <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')" :disabled="time !== 0 && position.y &lt;= 0">
-                        <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
-                    </button>
-                    <button @click="update" class="icon" title="Step Forward" :disabled="(time !== 0 && position.y &lt;= 0) || active">
-                        <img alt="" src="../images/step-forward.svg">
-                    </button>
-                    <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
-                        <img alt="" src="../images/reset.svg">
-                    </button>
-                </div>
-                <div id="zoomControls">
-                    <button @click="svg.zoomOut()" class="icon" title="Zoom Out">
-                        <img alt="" src="../images/zoom-out.svg">
-                    </button>
-                    <button @click="svg.resetZoom();svg.resetPan()" class="icon" title="Reset Zoom">
-                        <img alt="" src="../images/home.svg">
-                    </button>
-                    <button @click="svg.zoomIn()" class="icon" title="Zoom In">
-                        <img alt="" src="../images/zoom-in.svg">
-                    </button>
-                </div>
-                <svg width="400px" height="400px" viewBox="-1 -1 101 102">
-                    <!-- Ground -->
-                    <line x1="-10000" y1="101" x2="10000" y2="101" stroke-width="1" stroke="#404040"></line>
+            <div id="info" v-show="infoVisible" hidden>
+                <h2>Simulation Information</h2>
+                <p>This simulation consists of a projectile that can be launched.</p>
 
-                    <!-- Path -->
-                    <circle v-for="position in positions" :cx="10*position.x" :cy="100 - 10*position.y" r="0.5" fill="#808080"></circle>
+                <p>You can control the simulation using these variables:</p>
+                <ul>
+                    <li><b>Height:</b> The initial height of the projectile</li>
+                    <li><b>Velocity:</b> The initial velocity of the projectile</li>
+                    <li><b>Angle:</b> The angle to launch the projectile at</li>
+                    <li><b>Gravity:</b> The acceleration due to gravity</li>
+                </ul>
 
-                    <!-- Launch vector -->
-                    <line :x1="10*position.x" :y1="100 - 10*position.y" :x2="10*launchArrow[1].x" :y2="100 - 10*launchArrow[1].y"  stroke-width="1" stroke="#808080"></line>
-                    <path :d="`M${10*launchArrow[0].x} ${100 - 10*launchArrow[0].y} L${10*launchArrow[1].x} ${100 - 10*launchArrow[1].y} L${10*launchArrow[2].x} ${100 - 10*launchArrow[2].y} Z`" stroke="#808080" stroke-width="1" fill="#808080"/>
+                <p>The simulation also contains these output measurements:</p>
+                <ul>
+                    <li><b>Time:</b> The time that has passed</li>
+                    <li><b>Position:</b> The current position of the projectile</li>
+                    <li><b>Velocity:</b> The current velocity of the projectile</li>
+                </ul>
 
-                    <!-- Projectile -->
-                    <circle :cx="10*position.x" :cy="100 - 10*position.y" r="1" fill="#ff0000"></circle>
-                </svg>
-            </div>
-
-            <div id="data" hidden>
-                <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
-                <label><b>Position:</b> {{ position.x.toFixed(2) }} m, {{ position.y > 0 ? position.y.toFixed(2) : 0.0.toFixed(2) }} m</label>
-                <label><b>Velocity:</b> {{ velocity.total.toFixed(2) }} m/s at {{ velocity.angle.toFixed(1) }}<sup>o</sup></label>
+                <p>Controls:</p>
+                <ul>
+                    <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
+                    <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
+                    <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                    <li>Click and drag the simulation to pan</li>
+                    <li>Use the zoom in <img alt="" src="../images/zoom-in.svg"> and zoom out <img alt="" src="../images/zoom-out.svg"> buttons or the mouse wheel to zoom in and out</li>
+                    <li>Use the reset zoom <img alt="" src="../images/home.svg"> button to undo all zooming and panning</li>
+                </ul>
             </div>
         </div>
     </body>

@@ -15,6 +15,8 @@
         <div id="app">
             <header>
                 <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
+                <button v-show="!infoVisible" title="About" class="icon" @click="infoVisible=true"><img alt="" src="../images/info.svg"></button>
+                <button v-show="infoVisible" title="Close" class="icon" @click="infoVisible=false"><img alt="" src="../images/x.svg"></button>
                 <h1>Spring-Mass System</h1>
             </header>
 
@@ -22,54 +24,91 @@
                 <p>This simulation requires JavaScript</p>
             </noscript>
 
-            <div id="input" hidden>
-                <section>
-                    <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
-                    <input type="range" min="0.1" max="10" step="0.1" v-model.number="mass" @input="reset" @dblclick="mass=5" :disabled="active" id="massInput">
-                </section>
-                <section>
-                    <label for="initialPositionInput"><b>Initial Position:</b> {{ initialPosition.toFixed(1) }} m</label>
-                    <input type="range" min="-10" max="10" step="0.1" v-model.number="initialPosition" @input="reset" @dblclick="initialPosition=0" :disabled="active" id="initialPositionInput">
-                </section>
-                <section>
-                    <label for="stiffnessInput"><b>Stiffness (k):</b> {{ stiffness.toFixed(0) }} N/m</label>
-                    <input type="range" min="1" max="100" step="1" v-model.number="stiffness" @input="reset" @dblclick="stiffness=5" :disabled="active" id="stiffnessInput">
-                </section>
-            </div>
-
-            <div id="output" hidden>
-                <div id="simControls">
-                    <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
-                        <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
-                    </button>
-                    <button @click="update" class="icon" title="Step Forward" :disabled="active">
-                        <img alt="" src="../images/step-forward.svg">
-                    </button>
-                    <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
-                        <img alt="" src="../images/reset.svg">
-                    </button>
+            <div id="simulation" v-show="!infoVisible">
+                <div id="input" hidden>
+                    <section>
+                        <label for="massInput"><b>Mass:</b> {{ mass.toFixed(1) }} Kg</label>
+                        <input type="range" min="0.1" max="10" step="0.1" v-model.number="mass" @input="reset" @dblclick="mass=5" :disabled="active" id="massInput">
+                    </section>
+                    <section>
+                        <label for="initialPositionInput"><b>Initial Position:</b> {{ initialPosition.toFixed(1) }} m</label>
+                        <input type="range" min="-10" max="10" step="0.1" v-model.number="initialPosition" @input="reset" @dblclick="initialPosition=0" :disabled="active" id="initialPositionInput">
+                    </section>
+                    <section>
+                        <label for="stiffnessInput"><b>Stiffness (k):</b> {{ stiffness.toFixed(0) }} N/m</label>
+                        <input type="range" min="1" max="100" step="1" v-model.number="stiffness" @input="reset" @dblclick="stiffness=5" :disabled="active" id="stiffnessInput">
+                    </section>
                 </div>
-                <svg width="800px" viewBox="-11 0 22 4">
-                    <!-- Point of equilibrium -->
-                    <line x1="0" y1="0" :x2="0" y2="4" stroke="#808080" stroke-width="0.05" stroke-dasharray="0.1,0.1"></line>
 
-                    <!-- Spring -->
-                    <line x1="-11" y1="2" :x2="position" y2="2" stroke="#404040" stroke-width="0.1"></line>
-                    <rect x="-11" y="1" width="0.25" height="2" fill="#000000"></rect>
+                <div id="output" hidden>
+                    <div id="simControls">
+                        <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
+                            <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                        </button>
+                        <button @click="update" class="icon" title="Step Forward" :disabled="active">
+                            <img alt="" src="../images/step-forward.svg">
+                        </button>
+                        <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
+                            <img alt="" src="../images/reset.svg">
+                        </button>
+                    </div>
+                    <svg width="800px" viewBox="-11 0 22 4">
+                        <!-- Point of equilibrium -->
+                        <line x1="0" y1="0" :x2="0" y2="4" stroke="#808080" stroke-width="0.05" stroke-dasharray="0.1,0.1"></line>
 
-                    <!-- Mass -->
-                    <circle :cx="position" cy="2" :r="0.05*mass+0.1" fill="#ff0000"></circle>
-                </svg>
+                        <!-- Spring -->
+                        <line x1="-11" y1="2" :x2="position" y2="2" stroke="#404040" stroke-width="0.1"></line>
+                        <rect x="-11" y="1" width="0.25" height="2" fill="#000000"></rect>
+
+                        <!-- Mass -->
+                        <circle :cx="position" cy="2" :r="0.05*mass+0.1" fill="#ff0000"></circle>
+                    </svg>
+                </div>
+
+                <div id="data" hidden>
+                    <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
+                    <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
+                    <label><b>Amplitude:</b> {{ Math.abs(initialPosition) }} m</label>
+                    <label><b>Position:</b> {{ position.toFixed(2) }} m</label>
+                    <label><b>Velocity:</b> {{ velocity.toFixed(2) }} m/s</label>
+                    <label><b>Force:</b> {{ force.toFixed(2) }} N</label>
+                    <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
+                </div>
             </div>
 
-            <div id="data" hidden>
-                <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
-                <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
-                <label><b>Amplitude:</b> {{ Math.abs(initialPosition) }} m</label>
-                <label><b>Position:</b> {{ position.toFixed(2) }} m</label>
-                <label><b>Velocity:</b> {{ velocity.toFixed(2) }} m/s</label>
-                <label><b>Force:</b> {{ force.toFixed(2) }} N</label>
-                <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
+            <div id="info" v-show="infoVisible" hidden>
+                <h2>Simulation Information</h2>
+                <p>This simulation consists of an object attached to a spring that can stretch and contract.</p>
+
+                <p>You can control the simulation using these variables:</p>
+                <ul>
+                    <li><b>Mass:</b> The mass of the object</li>
+                    <li><b>Initial Position:</b> The initial displacement of the object relative to the point of equilibrium</li>
+                    <li><b>Stiffness:</b> The stiffness coefficient of the spring</li>
+                </ul>
+
+                <p>The simulation also contains these output measurements:</p>
+                <ul>
+                    <li><b>Time:</b> The time that has passed</li>
+                    <li><b>Period:</b> The period of the spring-mass system</li>
+                    <li><b>Amplitude:</b> The maximum displacement of the object relative to the point of equilibrium</li>
+                    <li><b>Position:</b> The current displacement of the object relative to the point of equilibrium</li>
+                    <li><b>Velocity:</b> The current velocity of the object</li>
+                    <li><b>Force:</b> The force currently being exerted on the object by the spring</li>
+                    <li><b>Acceleration:</b> The current acceleration of the object</li>
+                </ul>
+
+                <p>Controls:</p>
+                <ul>
+                    <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
+                    <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
+                    <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
+
+                <p>Notes:</p>
+                <ul>
+                    <li>The dotted line represents the point of equilibrium.</li>
+                </ul>
             </div>
         </div>
     </body>

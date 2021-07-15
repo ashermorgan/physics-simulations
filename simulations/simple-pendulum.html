@@ -15,6 +15,8 @@
         <div id="app">
             <header>
                 <a title="Home" href="../" class="icon"><img alt="" src="../images/home.svg"></a>
+                <button v-show="!infoVisible" title="About" class="icon" @click="infoVisible=true"><img alt="" src="../images/info.svg"></button>
+                <button v-show="infoVisible" title="Close" class="icon" @click="infoVisible=false"><img alt="" src="../images/x.svg"></button>
                 <h1>Simple Pendulum</h1>
             </header>
 
@@ -22,51 +24,80 @@
                 <p>This simulation requires JavaScript</p>
             </noscript>
 
-            <div id="input" hidden>
-                <section>
-                    <label for="radiusInput"><b>Radius:</b> {{ radius.toFixed(1) }} m</label>
-                    <input type="range" min="1" max="10" step="0.1" v-model.number="radius" @input="reset" @dblclick="radius=5" :disabled="active" id="radiusInput">
-                </section>
-                <section>
-                    <label for="angleInput"><b>Initial Angle:</b> {{ initialAngle.toFixed(0) }}<sup>o</sup></label>
-                    <input type="range" min="-45" max="45" step="1" v-model.number="initialAngle" @input="reset" @dblclick="initialAngle=0" :disabled="active" id="angleInput">
-                </section>
-                <section>
-                    <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
-                    <input type="range" min="0.1" max="10" step="0.1" v-model.number="gravity" @input="reset" @dblclick="gravity=9.8" :disabled="active" id="gravityInput">
-                </section>
-            </div>
-
-            <div id="output" hidden>
-                <div id="simControls">
-                    <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
-                        <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
-                    </button>
-                    <button @click="update" class="icon" title="Step Forward" :disabled="active">
-                        <img alt="" src="../images/step-forward.svg">
-                    </button>
-                    <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
-                        <img alt="" src="../images/reset.svg">
-                    </button>
+            <div id="simulation" v-show="!infoVisible">
+                <div id="input" hidden>
+                    <section>
+                        <label for="radiusInput"><b>Radius:</b> {{ radius.toFixed(1) }} m</label>
+                        <input type="range" min="1" max="10" step="0.1" v-model.number="radius" @input="reset" @dblclick="radius=5" :disabled="active" id="radiusInput">
+                    </section>
+                    <section>
+                        <label for="angleInput"><b>Initial Angle:</b> {{ initialAngle.toFixed(0) }}<sup>o</sup></label>
+                        <input type="range" min="-45" max="45" step="1" v-model.number="initialAngle" @input="reset" @dblclick="initialAngle=0" :disabled="active" id="angleInput">
+                    </section>
+                    <section>
+                        <label for="gravityInput"><b>Gravity:</b> {{ gravity.toFixed(1) }} m/s<sup>2</sup></label>
+                        <input type="range" min="0.1" max="10" step="0.1" v-model.number="gravity" @input="reset" @dblclick="gravity=9.8" :disabled="active" id="gravityInput">
+                    </section>
                 </div>
-                <svg width="400px" viewBox="-8 -3 16 16">
-                    <!-- String -->
-                    <circle cx="0" c1="0" r="0.1" fill="#808080"></circle>
-                    <line x1="0" y1="0" :x2="position.x" :y2="-position.y" stroke="#808080" stroke-width="0.2"></line>
 
-                    <!-- Box -->
-                    <rect x="-2" y="-0.5" width="4" height="0.5" fill="#000000"></rect>
+                <div id="output" hidden>
+                    <div id="simControls">
+                        <button @click="toggle" class="icon" :title="active ? 'Pause' : (time === 0 ? 'Start' : 'Resume')">
+                            <img alt="" :src="active ? '../images/pause.svg' : '../images/play.svg'">
+                        </button>
+                        <button @click="update" class="icon" title="Step Forward" :disabled="active">
+                            <img alt="" src="../images/step-forward.svg">
+                        </button>
+                        <button @click="reset" class="icon" title="Reset" :disabled="time === 0">
+                            <img alt="" src="../images/reset.svg">
+                        </button>
+                    </div>
+                    <svg width="400px" viewBox="-8 -3 16 16">
+                        <!-- String -->
+                        <circle cx="0" c1="0" r="0.1" fill="#808080"></circle>
+                        <line x1="0" y1="0" :x2="position.x" :y2="-position.y" stroke="#808080" stroke-width="0.2"></line>
 
-                    <!-- Mass -->
-                    <circle :cx="position.x" :cy="-position.y" r="0.5" fill="#ff0000"></circle>
-                </svg>
+                        <!-- Box -->
+                        <rect x="-2" y="-0.5" width="4" height="0.5" fill="#000000"></rect>
+
+                        <!-- Mass -->
+                        <circle :cx="position.x" :cy="-position.y" r="0.5" fill="#ff0000"></circle>
+                    </svg>
+                </div>
+
+                <div id="data" hidden>
+                    <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
+                    <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
+                    <label><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
+                    <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
+                </div>
             </div>
 
-            <div id="data" hidden>
-                <label><b>Time:</b> {{ time.toFixed(2) }} s</label>
-                <label><b>Period:</b> {{ period.toFixed(2) }} s</label>
-                <label><b>Angle:</b> {{ angle.toFixed(0) }}<sup>o</sup></label>
-                <label><b>Acceleration:</b> {{ acceleration.toFixed(2) }} m/s<sup>2</sup></label>
+            <div id="info" v-show="infoVisible" hidden>
+                <h2>Simulation Information</h2>
+                <p>This simulation consists of a mass suspended from a frictionless pivot by a massless string.</p>
+
+                <p>You can control the simulation using these variables:</p>
+                <ul>
+                    <li><b>Radius:</b> The length of the string</li>
+                    <li><b>Initial Angle:</b> The initial angle of the pendulum</li>
+                    <li><b>Gravity:</b> The acceleration due to gravity</li>
+                </ul>
+
+                <p>The simulation also contains these output measurements:</p>
+                <ul>
+                    <li><b>Time:</b> The time that has passed</li>
+                    <li><b>Period:</b> The period of the pendulum</li>
+                    <li><b>Angle:</b> The current angle of the pendulum</li>
+                    <li><b>Acceleration:</b> The current acceleration of the mass</li>
+                </ul>
+
+                <p>Controls:</p>
+                <ul>
+                    <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
+                    <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
+                    <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
             </div>
         </div>
     </body>

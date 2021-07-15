@@ -10,6 +10,8 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
         <link rel="stylesheet" href="styles.css">
         <script src="spring-mass-system.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </head>
     <body onload="createApp()">
         <div id="app">
@@ -103,6 +105,46 @@
                     <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
                     <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
                     <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
+
+                <p>Equations:</p>
+                <ul>
+                    <li>
+                        \( T = { 2 \cdot \pi \cdot \sqrt{ m \over k } } \)
+                        <ul>
+                            <li>\(T\) is the period of the spring-mass system</li>
+                            <li>\(m\) is the mass of the object</li>
+                            <li>\(k\) is the stiffness coefficient of the spring</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( x = { x_0  \cdot cos{ t \cdot k \over m } } \)
+                        <ul>
+                            <li>\(x\) is the displacement of the object relative to the point of equilibrium</li>
+                            <li>\(x_0\) is the initial displacement of the object relative to the point of equilibrium</li>
+                            <li>\(t\) is the time that has passed</li>
+                            <li>\(k\) is the stiffness coefficient of the spring</li>
+                            <li>\(m\) is the mass of the object</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( v = { -2 \cdot \pi \cdot x_0 \cdot sin{ t \cdot k \over m } } \)
+                        <ul>
+                            <li>\(v\) is the velocity of the object</li>
+                            <li>\(x_0\) is the initial displacement of the object relative to the point of equilibrium</li>
+                            <li>\(t\) is the time that has passed</li>
+                            <li>\(k\) is the stiffness coefficient of the spring</li>
+                            <li>\(m\) is the mass of the object</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( F_s = { -k \cdot x } \)
+                        <ul>
+                            <li>\(F\) is the force exerted on the object by the spring</li>
+                            <li>\(k\) is the stiffness coefficient of the spring</li>
+                            <li>\(x\) is the displacement of the object relative to the point of equilibrium</li>
+                        </ul>
+                    </li>
                 </ul>
 
                 <p>Notes:</p>

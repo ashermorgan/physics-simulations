@@ -10,6 +10,8 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
         <link rel="stylesheet" href="styles.css">
         <script src="atwood-machine.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </head>
     <body onload="createApp()">
         <div id="app">
@@ -103,6 +105,37 @@
                     <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
                     <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
                     <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
+
+                <p>Equations:</p>
+                <ul>
+                    <li>
+                        \( a = { F_{net} \over m_1 + m_2 } = { m_1 \cdot g - m_2 \cdot g \cdot sin{ \theta } \over m_1 + m_2 } \)
+                        <ul>
+                            <li>\(a\) is the acceleration of the blue weight</li>
+                            <li>\(F_{net}\) is the net force on the blue weight</li>
+                            <li>\(m_1\) is the mass of the red weight</li>
+                            <li>\(m_2\) is the mass of the blue weight</li>
+                            <li>\(g\) is the acceleration due to gravity</li>
+                            <li>\(\theta\) is the angle of the incline that the blue weight sits on</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( v = { a \cdot t } \)
+                        <ul>
+                            <li>\(v\) is the velocity of the blue weight</li>
+                            <li>\(a\) is the acceleration of the blue weight</li>
+                            <li>\(t\) is the time that has passed</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( x = { {1 \over 2} \cdot a \cdot t^2 } \)
+                        <ul>
+                            <li>\(x\) is the displacement of the blue weight</li>
+                            <li>\(a\) is the acceleration of the blue weight</li>
+                            <li>\(t\) is the time that has passed</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

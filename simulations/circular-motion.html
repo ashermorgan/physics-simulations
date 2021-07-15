@@ -10,6 +10,8 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
         <link rel="stylesheet" href="styles.css">
         <script src="circular-motion.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </head>
     <body onload="createApp()">
         <div id="app">
@@ -100,6 +102,27 @@
                     <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
                     <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
                     <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
+
+                <p>Equations:</p>
+                <ul>
+                    <li>
+                        \( v = { \sqrt{ F \cdot r \over m } } \)
+                        <ul>
+                            <li>\(v\) is the speed of the object</li>
+                            <li>\(F\) is the magnitude of the centripetal force</li>
+                            <li>\(r\) is the radius of the circle</li>
+                            <li>\(m\) is the mass of the object</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( T = { 2 \cdot \pi \cdot r \over v } \)
+                        <ul>
+                            <li>\(T\) is the period of the object</li>
+                            <li>\(r\) is the radius of the circle</li>
+                            <li>\(v\) is the speed of the object</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

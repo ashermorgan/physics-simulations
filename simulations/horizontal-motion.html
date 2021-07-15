@@ -10,6 +10,8 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@3.0.6"></script>
         <link rel="stylesheet" href="styles.css">
         <script src="horizontal-motion.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </head>
     <body onload="createApp()">
         <div id="app">
@@ -90,7 +92,7 @@
                 <p>You can control the simulation using these variables:</p>
                 <ul>
                     <li><b>Mass:</b> The mass of the object</li>
-                    <li><b>Applied Force:</b> The force applied on the ball</li>
+                    <li><b>Applied Force:</b> The applied force on the object</li>
                     <li><b>Static Friction:</b> The coefficient of static friction</li>
                     <li><b>Kinetic Friction:</b> The coefficient of kinetic friction</li>
                     <li><b>Gravity:</b> The acceleration due to gravity</li>
@@ -109,6 +111,29 @@
                     <li>Use the start <img alt="" src="../images/play.svg"> and stop <img alt="" src="../images/pause.svg"> buttons to start and stop the simulation</li>
                     <li>Use the step <img alt="" src="../images/step-forward.svg"> button to advance the simulation by 0.01 seconds</li>
                     <li>Use the reset <img alt="" src="../images/reset.svg"> button to restore the simulation to its initial state</li>
+                </ul>
+
+                <p>Equations:</p>
+                <ul>
+                    <li>
+                        \( | F_f | = { | \mu_k \cdot m \cdot g | } \)
+                        <ul>
+                            <li>\(F_f\) is the force of kinetic friction on the object</li>
+                            <li>\(\mu_k\) is the coefficient of kinetic friction</li>
+                            <li>\(m\) is the mass of the object</li>
+                            <li>\(g\) is the acceleration due to gravity</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( a = { F_{net} \over m } = { F_a + F_f \over m } \)
+                        <ul>
+                            <li>\(a\) is the acceleration of the object</li>
+                            <li>\(F_{net}\) is the net force on the object</li>
+                            <li>\(F_a\) is the applied force on the object</li>
+                            <li>\(F_f\) is the force of kinetic friction on the object</li>
+                            <li>\(m\) is the mass of the object</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

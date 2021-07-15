@@ -12,6 +12,8 @@
         <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
         <link rel="stylesheet" href="styles.css">
         <script src="projectile-motion.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </head>
     <body onload="createApp()">
         <div id="app">
@@ -119,6 +121,48 @@
                     <li>Click and drag the simulation to pan</li>
                     <li>Use the zoom in <img alt="" src="../images/zoom-in.svg"> and zoom out <img alt="" src="../images/zoom-out.svg"> buttons or the mouse wheel to zoom in and out</li>
                     <li>Use the reset zoom <img alt="" src="../images/home.svg"> button to undo all zooming and panning</li>
+                </ul>
+
+                <p>Equations:</p>
+                <ul>
+                    <li>
+                        \( x = { t \cdot v_0 \cdot cos{ \theta } } \)
+                        <ul>
+                            <li>\(x\) is the horizontal position of the projectile</li>
+                            <li>\(t\) is the time that has passed</li>
+                            <li>\(v_0\) is the initial velocity of the projectile</li>
+                            <li>\(\theta\) is the angle that the projectile was launched at</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( y = { y_0 + t \cdot v_0 \cdot sin{ \theta } - {1 \over 2} \cdot g \cdot t^2 } \)
+                        <ul>
+                            <li>\(y\) is the vertical position of the projectile</li>
+                            <li>\(y_0\) is the initial height of the projectile</li>
+                            <li>\(t\) is the time that has passed</li>
+                            <li>\(v_0\) is the initial velocity of the projectile</li>
+                            <li>\(\theta\) is the angle that the projectile was launched at</li>
+                            <li>\(g\) is the acceleration due to gravity</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( v_x = { v_0 \cdot cos{ \theta } } \)
+                        <ul>
+                            <li>\(v_x\) is the horizontal velocity of the projectile</li>
+                            <li>\(v_0\) is the initial velocity of the projectile</l>
+                            <li>\(\theta\) is the angle that the projectile was launched at</li>
+                        </ul>
+                    </li>
+                    <li>
+                        \( v_y = { v_0 \cdot sin{ \theta } - g \cdot t } \)
+                        <ul>
+                            <li>\(v_y\) is the vertical velocity of the projectile</li>
+                            <li>\(v_0\) is the initial velocity of the projectile</l>
+                            <li>\(\theta\) is the angle that the projectile was launched at</li>
+                            <li>\(g\) is the acceleration due to gravity</li>
+                            <li>\(t\) is the time that has passed</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

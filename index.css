@@ -11,6 +11,7 @@
 /* page header */
 header {
     background-color: #48d1cc;
+    color: #000000;
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -40,5 +41,17 @@ header h1 {
 @media only screen and (max-width: 500px) {
     #simulationLinks a {
         width: calc(100% - 30px);
+    }
+}
+
+/* dark mode */
+@media only screen and (prefers-color-scheme: dark) {
+    body {
+        background: #202020;
+        color: #e0e0e0;
+    }
+    #simulationLinks a {
+        background: #404040;
+        color: #e0e0e0;
     }
 }

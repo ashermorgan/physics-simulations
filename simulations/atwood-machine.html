@@ -61,14 +61,14 @@
                     </div>
                     <svg width="400px" viewBox="-0.1 -0.1 8.3 8.1">
                         <!-- Pulley -->
-                        <circle cx="1.5" cy="1.5" r="1" stroke-width="0.1" stroke="#808080" fill="#404040"></circle>
+                        <circle cx="1.5" cy="1.5" r="1" stroke-width="0.1" stroke="#a0a0a0" fill="#606060"></circle>
 
                         <!-- 1st weight -->
-                        <line x1="0.5" y1="1.5" x2="0.5" :y2="4.5 + displacement" stroke-width="0.1" stroke="#808080"></line>
+                        <line x1="0.5" y1="1.5" x2="0.5" :y2="4.5 + displacement" stroke-width="0.1" stroke="#a0a0a0"></line>
                         <circle cx="0.5" :cy="4.5 + displacement" :r="0.03*mass1+0.2" fill="#ff0000"></circle>
 
                         <!-- 2nd weight -->
-                        <line :x1="positionVector[0] + 1.5" :y1="positionVector[1] + 1.5" :x2="positionVector[2] + 1.5" :y2="positionVector[3] + 1.5" stroke-width="0.1" stroke="#808080"></line>
+                        <line :x1="positionVector[0] + 1.5" :y1="positionVector[1] + 1.5" :x2="positionVector[2] + 1.5" :y2="positionVector[3] + 1.5" stroke-width="0.1" stroke="#a0a0a0"></line>
                         <circle :cx="positionVector[2] + 1.5" :cy="positionVector[3] + 1.5" :r="0.03*mass2+0.2" fill="#0000ff"></circle>
                     </svg>
                 </div>

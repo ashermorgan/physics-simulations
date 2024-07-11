@@ -74,14 +74,14 @@
                     </div>
                     <svg width="400px" height="400px" viewBox="-1 -1 101 102">
                         <!-- Ground -->
-                        <line x1="-10000" y1="101" x2="10000" y2="101" stroke-width="1" stroke="#404040"></line>
+                        <line x1="-10000" y1="101" x2="10000" y2="101" stroke-width="1" stroke="#606060"></line>
 
                         <!-- Path -->
-                        <circle v-for="position in positions" :cx="10*position.x" :cy="100 - 10*position.y" r="0.5" fill="#808080"></circle>
+                        <circle v-for="position in positions" :cx="10*position.x" :cy="100 - 10*position.y" r="0.5" fill="#a0a0a0"></circle>
 
                         <!-- Launch vector -->
-                        <line :x1="10*position.x" :y1="100 - 10*position.y" :x2="10*launchArrow[1].x" :y2="100 - 10*launchArrow[1].y"  stroke-width="1" stroke="#808080"></line>
-                        <path :d="`M${10*launchArrow[0].x} ${100 - 10*launchArrow[0].y} L${10*launchArrow[1].x} ${100 - 10*launchArrow[1].y} L${10*launchArrow[2].x} ${100 - 10*launchArrow[2].y} Z`" stroke="#808080" stroke-width="1" fill="#808080"/>
+                        <line :x1="10*position.x" :y1="100 - 10*position.y" :x2="10*launchArrow[1].x" :y2="100 - 10*launchArrow[1].y"  stroke-width="1" stroke="#a0a0a0"></line>
+                        <path :d="`M${10*launchArrow[0].x} ${100 - 10*launchArrow[0].y} L${10*launchArrow[1].x} ${100 - 10*launchArrow[1].y} L${10*launchArrow[2].x} ${100 - 10*launchArrow[2].y} Z`" stroke="#a0a0a0" stroke-width="1" fill="#a0a0a0"/>
 
                         <!-- Projectile -->
                         <circle :cx="10*position.x" :cy="100 - 10*position.y" r="1" fill="#ff0000"></circle>

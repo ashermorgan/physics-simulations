@@ -65,8 +65,8 @@
                     </div>
                     <svg width="800px" viewBox="0 0 10 2">
                         <!-- Ruler marks -->
-                        <line v-for="(_,n) in 101" :x1="references[1] + n*0.1" y1="1.7" :x2="references[1] + n*0.1" y2="1.9" stroke-width="0.01" stroke="#000000"></line>
-                        <line v-for="(_,n) in 11"  :x1="references[0] + n"     y1="1.6" :x2="references[0] + n"     y2="2.0" stroke-width="0.02" stroke="#000000"></line>
+                        <line v-for="(_,n) in 101" :x1="references[1] + n*0.1" y1="1.7" :x2="references[1] + n*0.1" y2="1.9" stroke-width="0.01" stroke="currentColor"></line>
+                        <line v-for="(_,n) in 11"  :x1="references[0] + n"     y1="1.6" :x2="references[0] + n"     y2="2.0" stroke-width="0.02" stroke="currentColor"></line>
 
                         <!-- Force vector -->
                         <line x1="5" :y1="1.2 - 0.05*mass+0.1" :x2="5+0.3*force" :y2="1.2 - 0.05*mass+0.1" stroke-width="0.1" stroke="#808080"></line>
